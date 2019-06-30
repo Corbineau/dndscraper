@@ -4,11 +4,14 @@
 // Series of npm packages that we will use to give our server useful functionality
 // ==============================================================================
 
-var express = require("express");
-var config = require("./connection.js");
-var bodyParser = require("body-parser")
-var mongojs = require("mongojs");
-var routes = require("./routes");
+const express = require("express");
+var exphbs = require("express-handlebars");
+const bodyParser = require("body-parser")
+const cheerio = require("cheerio");
+const axios = require("axios");
+const htmlRoutes = require("./routes/htmlRoutes");
+const apiRoutes = require("./routes/apiRoutes");
+const db = require("./models");
 
 // ==============================================================================
 // EXPRESS CONFIGURATION
@@ -16,10 +19,10 @@ var routes = require("./routes");
 // ==============================================================================
 
 // Tells node that we are creating an "express" server
-var app = express();
+const app = express();
 
 // Sets an initial port. We"ll use this later in our listener
-var PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 
 
@@ -27,29 +30,37 @@ var PORT = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+//sets view engine to Handlebars
+
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+
 // ================================================================================
 // DATABASE
 // Sets up Storage using Mongo
 // ================================================================================
 
 
-// Use mongojs to hook the database to the db variable
-var db = mongojs(config.databade);
+// Use mongojs to hook the database to the db constiable
 
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongolab-asymmetrical-23114";
+mongoose.connect(MONGODB_URI);
 
 // ================================================================================
 // ROUTER
 // The below points our server to a series of "route" files.
-// These routes give our server a "map" of how to respond when users visit or request data from various URLs.
+// These routes give our server a "map" of how to respond when users visit or request data from constious URLs.
 // ================================================================================
 
 // Import routes and give the server access to them.
+app.use(express.static("./public"));
+app.use("/api", apiRoutes);
+app.use("/", htmlRoutes);
 
-app.use(routes);
-
+module.exports = app;
 
 // Static directory
-app.use(express.static("./public"));
+
 
 // =============================================================================
 // LISTENER
