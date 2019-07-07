@@ -6,8 +6,9 @@ const router = express.Router;
 router.get("/scrape", function(req, res) {
     // First, we grab the body of the html with axios
     axios.get("https://www.tribality.com/?s=unearthed+arcana").then(function(response) {
-      // Then, we load that into cheerio and save it to $ for a shorthand selector
+      // Then, we load that into cheerio and save it to $ for a shorthand selector; need to handle pagination.
       const $ = cheerio.load(response.data);
+      //want to put in a second site
   
       // Now, we grab every h2 within an article tag, and do the following:
       $("h3 a").each(function(i, element) {

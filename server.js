@@ -5,7 +5,8 @@
 // ==============================================================================
 
 const express = require("express");
-var exphbs = require("express-handlebars");
+const exphbs = require("express-handlebars");
+const logger = require("morgan");
 const bodyParser = require("body-parser")
 const cheerio = require("cheerio");
 const axios = require("axios");
