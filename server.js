@@ -42,7 +42,7 @@ app.set("view engine", "handlebars");
 // ================================================================================
 
 
-// Use mongojs to hook the database to the db constiable
+// Use mongojs to hook the database to the db 
 
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongolab-asymmetrical-23114";
 mongoose.connect(MONGODB_URI);
